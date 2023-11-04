@@ -1,0 +1,24 @@
+{
+    "name": "cry/selector-by-car-service-client-php",
+    "description": "Selector Tires and Wheels by Car Service / Client for pure PHP",
+    "type": "library",
+    "license": "free",
+    "autoload": {
+        "psr-4": {
+            "CryCMS\\SelectorByCarService\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Дмитрий Cry",
+            "email": "cry.int@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "ext-curl": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6"
+    }
+}
