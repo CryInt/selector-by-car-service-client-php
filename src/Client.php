@@ -16,6 +16,30 @@ class Client
 {
     public const SERVICE_HOST = 'https://selector.x03.ru';
 
+    public const ENTITY_BRANDS = 'brands';
+    public const ENTITY_YEARS = 'years';
+    public const ENTITY_MODELS = 'models';
+    public const ENTITY_MODIFICATIONS = 'modifications';
+    public const ENTITY_TYRES = 'tyres';
+    public const ENTITY_WHEELS = 'wheels';
+
+    protected const ENTITY_BRANDS_BUILDER = 'buildBrand';
+    protected const ENTITY_YEARS_BUILDER = 'buildYear';
+    protected const ENTITY_MODELS_BUILDER = 'buildModel';
+    protected const ENTITY_MODIFICATIONS_BUILDER = 'buildModification';
+    protected const ENTITY_MODIFICATIONS_SIMPLE_BUILDER = 'buildModificationSimple';
+    protected const ENTITY_TYRES_BUILDER = 'buildTyre';
+    protected const ENTITY_WHEELS_BUILDER = 'buildWheel';
+
+    protected const ENTITY_BUILDERS = [
+        self::ENTITY_BRANDS => self::ENTITY_BRANDS_BUILDER,
+        self::ENTITY_YEARS => self::ENTITY_YEARS_BUILDER,
+        self::ENTITY_MODELS => self::ENTITY_MODELS_BUILDER,
+        self::ENTITY_MODIFICATIONS => self::ENTITY_MODIFICATIONS_SIMPLE_BUILDER,
+        self::ENTITY_TYRES => self::ENTITY_TYRES_BUILDER,
+        self::ENTITY_WHEELS => self::ENTITY_WHEELS_BUILDER,
+    ];
+
     protected $error;
 
     /**
@@ -121,7 +145,7 @@ class Client
     /**
      * @throws TransportException
      */
-    public function getTyres(int $modificationId): array
+    public function getTyresList(int $modificationId): array
     {
         $result = [];
 
@@ -136,7 +160,7 @@ class Client
     /**
      * @throws TransportException
      */
-    public function getWheels(int $modificationId): array
+    public function getWheelsList(int $modificationId): array
     {
         $result = [];
 
@@ -146,6 +170,66 @@ class Client
         }
 
         return $result;
+    }
+
+    /**
+     * @throws TransportException
+     * @noinspection PhpMissingReturnTypeInspection
+     * @noinspection ReturnTypeCanBeDeclaredInspection
+     */
+    public function getByUrl(
+        string $entity,
+        ?string $brandUrl = null,
+        ?string $yearUrl = null,
+        ?string $modelUrl = null,
+        ?string $modificationUrl = null
+    )
+    {
+        $buildMethod = null;
+
+        $url = [];
+        $url[] = 'car';
+        $url[] = 'url';
+
+        if ($brandUrl !== null) {
+            $buildMethod = self::ENTITY_BRANDS_BUILDER;
+            $url[] = $brandUrl;
+        }
+
+        if ($yearUrl !== null) {
+            $buildMethod = self::ENTITY_YEARS_BUILDER;
+            $url[] = $yearUrl;
+        }
+
+        if ($modelUrl !== null) {
+            $buildMethod = self::ENTITY_MODELS_BUILDER;
+            $url[] = $modelUrl;
+        }
+
+        if ($modificationUrl !== null) {
+            $buildMethod = self::ENTITY_MODIFICATIONS_BUILDER;
+            $url[] = $modificationUrl;
+        }
+
+        if (array_key_exists($entity, self::ENTITY_BUILDERS)) {
+            $buildMethod = self::ENTITY_BUILDERS[$entity];
+            $url[] = $entity;
+        }
+
+        $query = self::SERVICE_HOST . '/' . implode('/', $url);
+
+        $data = $this->cUrl($query);
+        if (is_array($data)) {
+            $result = [];
+
+            foreach ($data as $once) {
+                $result[] = $this->$buildMethod($once);
+            }
+
+            return $result;
+        }
+
+        return $this->$buildMethod($data);
     }
 
     /**
