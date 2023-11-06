@@ -1,7 +1,6 @@
 <?php
 namespace CryCMS\SelectorByCarService;
 
-use CryCMS\SelectorByCarService\DTO\TitleDTO;
 use CryCMS\SelectorByCarService\DTO\BrandDTO;
 use CryCMS\SelectorByCarService\DTO\YearDTO;
 use CryCMS\SelectorByCarService\DTO\ModelDTO;
@@ -256,7 +255,6 @@ class Client
         $brandDTO->brand_id = $brandObject->brand_id;
         $brandDTO->name = $brandObject->name;
         $brandDTO->url = $brandObject->url;
-        $brandDTO->title = $this->buildTitle($brandObject->title);
 
         return $brandDTO;
     }
@@ -268,7 +266,6 @@ class Client
         $yearDTO->brand_id = $yearObject->brand_id;
         $yearDTO->name = $yearObject->name;
         $yearDTO->url = $yearObject->url;
-        $yearDTO->title = $this->buildTitle($yearObject->title);
 
         return $yearDTO;
     }
@@ -280,7 +277,6 @@ class Client
         $modelDTO->year_id = $modelObject->year_id;
         $modelDTO->name = $modelObject->name;
         $modelDTO->url = $modelObject->url;
-        $modelDTO->title = $this->buildTitle($modelObject->title);
 
         return $modelDTO;
     }
@@ -308,7 +304,6 @@ class Client
         $modificationSimpleDTO->dia = $modificationObject->dia;
         $modificationSimpleDTO->k_type = $modificationObject->k_type;
         $modificationSimpleDTO->k_size = $modificationObject->k_size;
-        $modificationSimpleDTO->title = $this->buildTitle($modificationObject->title);
 
         return $modificationSimpleDTO;
     }
@@ -337,17 +332,6 @@ class Client
         $wheelDTO->axis = $wheelObject->axis;
 
         return $wheelDTO;
-    }
-
-    protected function buildTitle($titleObject): TitleDTO
-    {
-        $titleDTO = new TitleDTO();
-        $titleDTO->brand = $titleObject->brand;
-        $titleDTO->year = $titleObject->year;
-        $titleDTO->model = $titleObject->model;
-        $titleDTO->modification = $titleObject->modification;
-
-        return $titleDTO;
     }
 
     /** @noinspection PhpUnused */

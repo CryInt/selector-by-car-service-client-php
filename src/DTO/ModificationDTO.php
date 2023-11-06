@@ -11,7 +11,6 @@ namespace CryCMS\SelectorByCarService\DTO;
  * @property $dia
  * @property $k_type
  * @property $k_size
- * @property TitleDTO $title
  */
 class ModificationDTO extends ModificationSimpleDTO
 {
@@ -19,5 +18,4 @@ class ModificationDTO extends ModificationSimpleDTO
     public $dia;
     public $k_type;
     public $k_size;
-    public $title;
 }

@@ -6,7 +6,6 @@ namespace CryCMS\SelectorByCarService\DTO;
  * @property $year_id
  * @property $name
  * @property $url
- * @property TitleDTO $title
  */
 class ModelDTO
 {
@@ -14,5 +13,4 @@ class ModelDTO
     public $year_id;
     public $name;
     public $url;
-    public $title;
 }

@@ -241,10 +241,7 @@ final class ClientTest extends TestCase
 
         $brand = $this->client->getByUrl('brand', self::$brandUrl);
         $this->assertNotEmpty($brand);
-        $this->assertEquals(
-            self::removeTitleFromTestTemporary(self::$brand),
-            self::removeTitleFromTestTemporary($brand)
-        );
+        $this->assertEquals(self::$brand, $brand);
     }
 
     /**
@@ -260,10 +257,7 @@ final class ClientTest extends TestCase
 
         $year = $this->client->getByUrl('year', self::$brandUrl, self::$yearUrl);
         $this->assertNotEmpty($year);
-        $this->assertEquals(
-            self::removeTitleFromTestTemporary(self::$year),
-            self::removeTitleFromTestTemporary($year)
-        );
+        $this->assertEquals(self::$year, $year);
     }
 
     /**
@@ -279,10 +273,7 @@ final class ClientTest extends TestCase
 
         $model = $this->client->getByUrl('model', self::$brandUrl, self::$yearUrl, self::$modelUrl);
         $this->assertNotEmpty($model);
-        $this->assertEquals(
-            self::removeTitleFromTestTemporary(self::$model),
-            self::removeTitleFromTestTemporary($model)
-        );
+        $this->assertEquals(self::$model, $model);
     }
 
     /**
@@ -353,21 +344,5 @@ final class ClientTest extends TestCase
 
         $this->assertNotEmpty($wheels);
         $this->assertEquals(self::$wheel, $wheels[0]);
-    }
-
-    /**
-     * @TODO - after adding correct title in methods by id - remove this
-     *
-     * @param $entity
-     *
-     * @return mixed
-     */
-    protected static function removeTitleFromTestTemporary($entity)
-    {
-        if (property_exists($entity, 'title')) {
-            $entity->title = null;
-        }
-
-        return $entity;
     }
 }
