@@ -41,6 +41,23 @@ class Client
 
     protected $error;
 
+    protected $host;
+    protected $token;
+
+    public function __construct(?string $token = null, ?string $host = null)
+    {
+        if ($token !== null) {
+            $this->token = $token;
+        }
+
+        if ($host !== null) {
+            $this->host = $host;
+        }
+        else {
+            $this->host = self::SERVICE_HOST;
+        }
+    }
+
     /**
      * @throws TransportException
      */
@@ -48,7 +65,7 @@ class Client
     {
         $result = [];
 
-        $brands = $this->cUrl(self::SERVICE_HOST . '/car/brands');
+        $brands = $this->cUrl($this->host . '/car/brands');
 
         foreach ($brands as $brand) {
             $result[] = $this->buildBrand($brand);
@@ -62,7 +79,7 @@ class Client
      */
     public function getBrand(int $brandId): ?BrandDTO
     {
-        $brand = $this->cUrl(self::SERVICE_HOST . '/car/brand/' . $brandId);
+        $brand = $this->cUrl($this->host . '/car/brand/' . $brandId);
         return $this->buildBrand($brand);
     }
 
@@ -73,7 +90,7 @@ class Client
     {
         $result = [];
 
-        $years = $this->cUrl(self::SERVICE_HOST . '/car/brand/' . $brandId . '/years');
+        $years = $this->cUrl($this->host . '/car/brand/' . $brandId . '/years');
 
         foreach ($years as $year) {
             $result[] = $this->buildYear($year);
@@ -87,7 +104,7 @@ class Client
      */
     public function getYear(int $yearId): ?YearDTO
     {
-        $year = $this->cUrl(self::SERVICE_HOST . '/car/year/' . $yearId);
+        $year = $this->cUrl($this->host . '/car/year/' . $yearId);
         return $this->buildYear($year);
     }
 
@@ -98,7 +115,7 @@ class Client
     {
         $result = [];
 
-        $models = $this->cUrl(self::SERVICE_HOST . '/car/year/' . $yearId . '/models');
+        $models = $this->cUrl($this->host . '/car/year/' . $yearId . '/models');
 
         foreach ($models as $model) {
             $result[] = $this->buildModel($model);
@@ -112,7 +129,7 @@ class Client
      */
     public function getModel(int $modelId): ?ModelDTO
     {
-        $model = $this->cUrl(self::SERVICE_HOST . '/car/model/' . $modelId);
+        $model = $this->cUrl($this->host . '/car/model/' . $modelId);
         return $this->buildModel($model);
     }
 
@@ -123,7 +140,7 @@ class Client
     {
         $result = [];
 
-        $modifications = $this->cUrl(self::SERVICE_HOST . '/car/model/' . $modificationId . '/modifications');
+        $modifications = $this->cUrl($this->host . '/car/model/' . $modificationId . '/modifications');
 
         foreach ($modifications as $modification) {
             $result[] = $this->buildModificationSimple($modification);
@@ -137,7 +154,7 @@ class Client
      */
     public function getModification(int $modification): ?ModificationDTO
     {
-        $modification = $this->cUrl(self::SERVICE_HOST . '/car/modification/' . $modification);
+        $modification = $this->cUrl($this->host . '/car/modification/' . $modification);
         return $this->buildModification($modification);
     }
 
@@ -148,7 +165,7 @@ class Client
     {
         $result = [];
 
-        $tyres = $this->cUrl(self::SERVICE_HOST . '/car/modification/' . $modificationId . '/tyres');
+        $tyres = $this->cUrl($this->host . '/car/modification/' . $modificationId . '/tyres');
         foreach ($tyres as $tyre) {
             $result[] = $this->buildTyre($tyre);
         }
@@ -163,7 +180,7 @@ class Client
     {
         $result = [];
 
-        $wheels = $this->cUrl(self::SERVICE_HOST . '/car/modification/' . $modificationId . '/wheels');
+        $wheels = $this->cUrl($this->host . '/car/modification/' . $modificationId . '/wheels');
         foreach ($wheels as $wheel) {
             $result[] = $this->buildWheel($wheel);
         }
@@ -215,7 +232,7 @@ class Client
             $url[] = $entity;
         }
 
-        $query = self::SERVICE_HOST . '/' . implode('/', $url);
+        $query = $this->host . '/' . implode('/', $url);
 
         $data = $this->cUrl($query);
         if (is_array($data)) {
@@ -236,7 +253,7 @@ class Client
      */
     public function getTyre(int $sizeId): ?TyreDTO
     {
-        $size = $this->cUrl(self::SERVICE_HOST . '/car/tyre/' . $sizeId);
+        $size = $this->cUrl($this->host . '/car/tyre/' . $sizeId);
         return $this->buildTyre($size);
     }
 
@@ -245,7 +262,7 @@ class Client
      */
     public function getWheel(int $sizeId): ?WheelDTO
     {
-        $size = $this->cUrl(self::SERVICE_HOST . '/car/wheel/' . $sizeId);
+        $size = $this->cUrl($this->host . '/car/wheel/' . $sizeId);
         return $this->buildWheel($size);
     }
 
@@ -350,10 +367,20 @@ class Client
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 360);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 360);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
 
         curl_setopt($ch, CURLOPT_POST, 0);
+
+        $headers = [];
+
+        if ($this->token !== null) {
+            $headers[] = "Authorization: Bearer " . $this->token;
+        }
+
+        if (count($headers) > 0) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
 
         $data = curl_exec($ch);
 

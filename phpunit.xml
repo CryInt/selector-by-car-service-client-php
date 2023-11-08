@@ -1,0 +1,11 @@
+<phpunit bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="MyProject">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="SELECTOR_SERVICE_HOST" value="http://192.168.1.236:18080" force="true" />
+        <env name="SELECTOR_SERVICE_TOKEN" value="TESTS-O3GJ4F-395I4" force="true" />
+    </php>
+</phpunit>

@@ -36,7 +36,10 @@ final class ClientTest extends TestCase
     {
         parent::setUp();
 
-        $this->client = new Client();
+        $token = $_ENV['SELECTOR_SERVICE_TOKEN'] ?? getenv('SELECTOR_SERVICE_TOKEN') ?? null;
+        $host = $_ENV['SELECTOR_SERVICE_HOST'] ?? getenv('SELECTOR_SERVICE_HOST') ?? null;
+
+        $this->client = new Client($token, $host);
     }
 
     // by id
