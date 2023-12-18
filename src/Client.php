@@ -235,6 +235,10 @@ class Client
         $query = $this->host . '/' . implode('/', $url);
 
         $data = $this->cUrl($query);
+        if (empty($data)) {
+            return null;
+        }
+
         if (is_array($data)) {
             $result = [];
 

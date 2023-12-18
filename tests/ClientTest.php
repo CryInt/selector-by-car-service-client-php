@@ -36,8 +36,25 @@ final class ClientTest extends TestCase
     {
         parent::setUp();
 
-        $token = $_ENV['SELECTOR_SERVICE_TOKEN'] ?? getenv('SELECTOR_SERVICE_TOKEN') ?? null;
-        $host = $_ENV['SELECTOR_SERVICE_HOST'] ?? getenv('SELECTOR_SERVICE_HOST') ?? null;
+        if (isset($_ENV) && array_key_exists('SELECTOR_SERVICE_TOKEN', $_ENV)) {
+            $token = $_ENV['SELECTOR_SERVICE_TOKEN'];
+        }
+        elseif (!empty($envToken = getenv('SELECTOR_SERVICE_TOKEN'))) {
+            $token = $envToken;
+        }
+        else {
+            $token = null;
+        }
+
+        if (isset($_ENV) && array_key_exists('SELECTOR_SERVICE_HOST', $_ENV)) {
+            $host = $_ENV['SELECTOR_SERVICE_HOST'];
+        }
+        elseif (!empty($envHost = getenv('SELECTOR_SERVICE_HOST'))) {
+            $host = $envHost;
+        }
+        else {
+            $host = null;
+        }
 
         $this->client = new Client($token, $host);
     }
