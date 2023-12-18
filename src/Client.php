@@ -181,8 +181,10 @@ class Client
         $result = [];
 
         $wheels = $this->cUrl($this->host . '/car/modification/' . $modificationId . '/wheels');
-        foreach ($wheels as $wheel) {
-            $result[] = $this->buildWheel($wheel);
+        if (!empty($wheels)) {
+            foreach ($wheels as $wheel) {
+                $result[] = $this->buildWheel($wheel);
+            }
         }
 
         return $result;
@@ -191,7 +193,6 @@ class Client
     /**
      * @throws TransportException
      * @noinspection PhpMissingReturnTypeInspection
-     * @noinspection ReturnTypeCanBeDeclaredInspection
      */
     public function getByUrl(
         string $entity,
@@ -258,7 +259,11 @@ class Client
     public function getTyre(int $sizeId): ?TyreDTO
     {
         $size = $this->cUrl($this->host . '/car/tyre/' . $sizeId);
-        return $this->buildTyre($size);
+        if (!empty($size)) {
+            return $this->buildTyre($size);
+        }
+
+        return null;
     }
 
     /**
@@ -267,7 +272,11 @@ class Client
     public function getWheel(int $sizeId): ?WheelDTO
     {
         $size = $this->cUrl($this->host . '/car/wheel/' . $sizeId);
-        return $this->buildWheel($size);
+        if (!empty($size)) {
+            return $this->buildWheel($size);
+        }
+
+        return null;
     }
 
     protected function buildBrand($brandObject): BrandDTO
