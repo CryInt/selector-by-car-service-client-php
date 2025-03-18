@@ -365,4 +365,38 @@ final class ClientTest extends TestCase
         $this->assertNotEmpty($wheels);
         $this->assertEquals(self::$wheel, $wheels[0]);
     }
+
+    // auto
+
+    /**
+     * @throws TransportException
+     */
+    public function testGetAutoByTire(): void
+    {
+        $autoList = $this->client->getAutoByTire('195', '65', '15');
+
+        $this->assertNotEmpty($autoList);
+        $this->assertNotEmpty($autoList[0]);
+        $this->assertNotEmpty($autoList[0]->brand);
+        $this->assertNotEmpty($autoList[0]->model);
+        $this->assertNotEmpty($autoList[0]->modification);
+        $this->assertNotEmpty($autoList[0]->years);
+        $this->assertNotEmpty($autoList[0]->yearsRange);
+    }
+
+    /**
+     * @throws TransportException
+     */
+    public function testGetAutoByWheel(): void
+    {
+        $autoList = $this->client->getAutoByWheel('13', '5', '4', '100', '46', '54.10');
+
+        $this->assertNotEmpty($autoList);
+        $this->assertNotEmpty($autoList[0]);
+        $this->assertNotEmpty($autoList[0]->brand);
+        $this->assertNotEmpty($autoList[0]->model);
+        $this->assertNotEmpty($autoList[0]->modification);
+        $this->assertNotEmpty($autoList[0]->years);
+        $this->assertNotEmpty($autoList[0]->yearsRange);
+    }
 }

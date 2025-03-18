@@ -1,6 +1,7 @@
 <?php
 namespace CryCMS\SelectorByCarService;
 
+use CryCMS\SelectorByCarService\DTO\AutoDTO;
 use CryCMS\SelectorByCarService\DTO\BrandDTO;
 use CryCMS\SelectorByCarService\DTO\YearDTO;
 use CryCMS\SelectorByCarService\DTO\ModelDTO;
@@ -279,6 +280,64 @@ class Client
         return null;
     }
 
+    /**
+     * @param string $width
+     * @param string $height
+     * @param string $diameter
+     * @return array [AutoDTO]
+     *
+     * @throws TransportException
+     */
+    public function getAutoByTire(
+        string $width,
+        string $height,
+        string $diameter
+    ): array
+    {
+        $result = [];
+
+        $list = $this->cUrl($this->host . '/auto/tyre/' . $width . '/' . $height . '/' . $diameter . '/list');
+        if (!empty($list)) {
+            foreach ($list as $one) {
+                $result[] = $this->buildAuto($one);
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $diameter
+     * @param string $width
+     * @param string $holes
+     * @param string $pcd
+     * @param string $et
+     * @param string $dia
+     * @return array [AutoDTO]
+     *
+     * @throws TransportException
+     */
+    public function getAutoByWheel(
+        string $diameter,
+        string $width,
+        string $holes,
+        string $pcd,
+        string $et,
+        string $dia
+    ): array
+    {
+        $result = [];
+
+        $list = $this->cUrl($this->host . '/auto/wheel/' . $diameter . '/' . $width . '/' . $holes. '/' . $pcd . '/' . $et . '/' . $dia . '/list');
+        if (!empty($list)) {
+            foreach ($list as $one) {
+                $result[] = $this->buildAuto($one);
+            }
+        }
+
+        return $result;
+    }
+
     protected function buildBrand($brandObject): BrandDTO
     {
         $brandDTO = new BrandDTO();
@@ -362,6 +421,61 @@ class Client
         $wheelDTO->axis = $wheelObject->axis;
 
         return $wheelDTO;
+    }
+
+    protected function buildAuto($autoObject): AutoDTO
+    {
+        $autoDTO = new AutoDTO();
+        $autoDTO->brand = $autoObject->brand;
+        $autoDTO->model = $autoObject->model;
+        $autoDTO->modification = $autoObject->modification;
+        $autoDTO->years = $this->getYears($autoObject->years);
+        $autoDTO->yearsRange = $this->getYearsRange($autoDTO->years);
+
+        return $autoDTO;
+    }
+
+    protected function getYears(string $years): array
+    {
+        return explode(',', $years);
+    }
+
+    protected function getYearsRange(array $years): array
+    {
+        $result = [];
+
+        sort($years);
+
+        $rangeStart = $rangeEnd = null;
+
+        foreach ($years as $year) {
+            $year = (int)$year;
+
+            if ($rangeStart === null) {
+                $rangeStart = $year;
+            }
+
+            if ($rangeEnd === null || $rangeEnd === ($year - 1)) {
+                $rangeEnd = $year;
+            }
+            else {
+                $result[] = [
+                    'start' => $rangeStart,
+                    'end' => $rangeEnd,
+                ];
+
+                $rangeStart = $rangeEnd = null;
+            }
+        }
+
+        if ($rangeStart !== null) {
+            $result[] = [
+                'start' => $rangeStart,
+                'end' => $rangeEnd,
+            ];
+        }
+
+        return $result;
     }
 
     /** @noinspection PhpUnused */
