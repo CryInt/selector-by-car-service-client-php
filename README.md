@@ -1,15 +1,13 @@
 ```
-Version: 0.0.5
+Version: 0.0.6
 ```
 
 ```
-PHPUnit 9.6.13 by Sebastian Bergmann and contributors.
+PHPUnit 9.6.7 by Sebastian Bergmann and contributors.
 
-Runtime:       PHP 7.3.33
+.................... 20 / 20 (100%)
 
-.................. 18 / 18 (100%)
+Time: 00:00.778, Memory: 6.00 MB
 
-Time: 00:06.355, Memory: 4.00 MB
-
-OK (18 tests, 107 assertions)
+OK (20 tests, 121 assertions)
 ```
