@@ -379,7 +379,6 @@ final class ClientTest extends TestCase
         $this->assertNotEmpty($autoList[0]);
         $this->assertNotEmpty($autoList[0]->brand);
         $this->assertNotEmpty($autoList[0]->model);
-        $this->assertNotEmpty($autoList[0]->modification);
         $this->assertNotEmpty($autoList[0]->years);
         $this->assertNotEmpty($autoList[0]->yearsRange);
     }
@@ -395,7 +394,6 @@ final class ClientTest extends TestCase
         $this->assertNotEmpty($autoList[0]);
         $this->assertNotEmpty($autoList[0]->brand);
         $this->assertNotEmpty($autoList[0]->model);
-        $this->assertNotEmpty($autoList[0]->modification);
         $this->assertNotEmpty($autoList[0]->years);
         $this->assertNotEmpty($autoList[0]->yearsRange);
     }

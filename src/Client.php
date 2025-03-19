@@ -428,7 +428,6 @@ class Client
         $autoDTO = new AutoDTO();
         $autoDTO->brand = $autoObject->brand;
         $autoDTO->model = $autoObject->model;
-        $autoDTO->modification = $autoObject->modification;
         $autoDTO->years = $this->getYears($autoObject->years);
         $autoDTO->yearsRange = $this->getYearsRange($autoDTO->years);
 

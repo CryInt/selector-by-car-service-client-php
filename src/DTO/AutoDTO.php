@@ -12,7 +12,6 @@ class AutoDTO
 {
     public $brand;
     public $model;
-    public $modification;
     public $years;
     public $yearsRange;
 }
