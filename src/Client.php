@@ -93,8 +93,10 @@ class Client
 
         $years = $this->cUrl($this->host . '/car/brand/' . $brandId . '/years');
 
-        foreach ($years as $year) {
-            $result[] = $this->buildYear($year);
+        if (!empty($years)) {
+            foreach ($years as $year) {
+                $result[] = $this->buildYear($year);
+            }
         }
 
         return $result;
@@ -118,8 +120,10 @@ class Client
 
         $models = $this->cUrl($this->host . '/car/year/' . $yearId . '/models');
 
-        foreach ($models as $model) {
-            $result[] = $this->buildModel($model);
+        if (!empty($models)) {
+            foreach ($models as $model) {
+                $result[] = $this->buildModel($model);
+            }
         }
 
         return $result;
@@ -143,8 +147,10 @@ class Client
 
         $modifications = $this->cUrl($this->host . '/car/model/' . $modificationId . '/modifications');
 
-        foreach ($modifications as $modification) {
-            $result[] = $this->buildModificationSimple($modification);
+        if (!empty($modifications)) {
+            foreach ($modifications as $modification) {
+                $result[] = $this->buildModificationSimple($modification);
+            }
         }
 
         return $result;
@@ -167,8 +173,11 @@ class Client
         $result = [];
 
         $tyres = $this->cUrl($this->host . '/car/modification/' . $modificationId . '/tyres');
-        foreach ($tyres as $tyre) {
-            $result[] = $this->buildTyre($tyre);
+
+        if (!empty($tyres)) {
+            foreach ($tyres as $tyre) {
+                $result[] = $this->buildTyre($tyre);
+            }
         }
 
         return $result;
@@ -182,6 +191,7 @@ class Client
         $result = [];
 
         $wheels = $this->cUrl($this->host . '/car/modification/' . $modificationId . '/wheels');
+
         if (!empty($wheels)) {
             foreach ($wheels as $wheel) {
                 $result[] = $this->buildWheel($wheel);
